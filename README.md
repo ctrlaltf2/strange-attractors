@@ -1,2 +1,2 @@
-# stranger-attractors
-Strange attractor visualization tool
+# Strange attractor visualization tool
+Final project for University of Pittsburgh ECE 1895
