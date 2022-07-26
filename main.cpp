@@ -11,7 +11,7 @@ int main() {
 
     double a =  1.6;
     double b =  1.2;
-    double c = -1.2;
+    double c = -1.1;
     double d =  1.6;
 
     auto next_x = [=](Vec4& pt) {
