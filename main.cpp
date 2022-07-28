@@ -1,17 +1,15 @@
-#include <boost/multiprecision/gmp.hpp>
+#include <pcl/visualization/cloud_viewer.h>
 #include <iostream>
-#include <filesystem>
-
-using namespace boost::multiprecision;
+#include <pcl/io/io.h>
+#include <pcl/io/pcd_io.h>
 
 #include "Attractor.hpp"
 #include "Vec4.hpp"
 
 int main() {
-
     double a =  1.6;
     double b =  1.2;
-    double c = -1.1;
+    double c = -1.9;
     double d =  1.6;
 
     auto next_x = [=](Vec4& pt) {
@@ -26,5 +24,13 @@ int main() {
     Attractor Clifford(next_x, next_y);
 
     Clifford.run(10000000);
-    Clifford.dump_csv("./out.csv");
+
+    pcl::visualization::CloudViewer viewer("Cloud Viewer");
+
+    //blocks until the cloud is actually rendered
+    viewer.showCloud(Clifford.cloud);
+
+    while(!viewer.wasStopped()) { }
+
+    return 0;
 }
