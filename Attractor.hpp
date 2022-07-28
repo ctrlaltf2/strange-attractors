@@ -1,8 +1,14 @@
 #pragma once
+#include <filesystem>
 #include <fstream>
 #include <functional>
+#include <iostream>
 #include <vector>
 
+#include <pcl/impl/point_types.hpp>
+#include <pcl/point_cloud.h>
+#include <pcl/io/io.h>
+#include <pcl/io/pcd_io.h>
 
 #include "multiprecision.hpp"
 #include "Vec4.hpp"
@@ -24,11 +30,15 @@ public:
 
     std::vector<Vec4> points;
 
+    pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud{nullptr};
+
     /** 2-dimensional constructor */
     Attractor(X x_func, Y y_func) {
         next_x = x_func;
         next_y = y_func;
         dim = 2;
+
+        cloud.reset(new pcl::PointCloud<pcl::PointXYZRGBA>());
     }
 
     /** 3-dimensional constructor */
@@ -37,6 +47,8 @@ public:
         next_y = y_func;
         next_z = z_func;
         dim = 3;
+
+        cloud.reset(new pcl::PointCloud<pcl::PointXYZRGBA>());
     }
 
     /** 4-dimensional constructor */
@@ -46,6 +58,8 @@ public:
         next_z = z_func;
         next_w = w_func;
         dim = 4;
+
+        cloud.reset(new pcl::PointCloud<pcl::PointXYZRGBA>());
     }
 
     void set_initial_point(double x_, double y_, double z_ = 0, double w_ = 0) {
@@ -58,7 +72,9 @@ public:
     /** Run one iteration */
     inline void update() {
         // Save state
-        points.push_back(state_);
+
+        const pcl::PointXYZRGBA point(state_.x, state_.y, state_.z, 255, 255, 255, 32);
+        cloud->push_back(point);
 
         // And then update it
         bigfloat x = next_x(state_);
@@ -72,7 +88,7 @@ public:
     /** Run for iter iterations */
     void run(unsigned long long iter) {
         for(unsigned long long i = 0; i < iter; ++i) {
-            if(i % 2048 == 0) {
+            if(i % 8192 == 0) {
                 std::cout << "Iteration #" << i << '\n';
 
                 std::cout
@@ -88,6 +104,8 @@ public:
 
     /** Dump currently generated points to a CSV */
     void dump_csv(std::filesystem::path path) {
+        return;
+
         std::ofstream ofs(path);
 
         switch(dim) {
