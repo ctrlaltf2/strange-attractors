@@ -16,8 +16,6 @@ target_compile_options(viewer
         -Wall
         -Wextra
         -O3
-        -g
-        -ggdb
         -fsanitize=address,undefined,leak
         -Wshadow
         -Wnon-virtual-dtor
@@ -26,6 +24,8 @@ target_compile_options(viewer
         -Woverloaded-virtual
         -pedantic-errors
         -Wnull-dereference
+        -march=native
+        -mtune=native
 )
 
 set_target_properties(viewer

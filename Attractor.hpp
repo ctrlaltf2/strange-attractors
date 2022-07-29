@@ -73,7 +73,7 @@ public:
     inline void update() {
         // Save state
 
-        const pcl::PointXYZRGBA point(state_.x, state_.y, state_.z, 255, 255, 255, 32);
+        const pcl::PointXYZRGBA point(100*state_.x, 100*state_.y, 100*state_.z, 255, 255, 255, 32);
         cloud->push_back(point);
 
         // And then update it
@@ -88,7 +88,7 @@ public:
     /** Run for iter iterations */
     void run(unsigned long long iter) {
         for(unsigned long long i = 0; i < iter; ++i) {
-            if(i % 8192 == 0) {
+            /*if(i % 8192 == 0) {
                 std::cout << "Iteration #" << i << '\n';
 
                 std::cout
@@ -96,7 +96,7 @@ public:
                     << state_.x << ", " << state_.y << ", "
                     << state_.z << ", " << state_.w << ")"
                     << std::endl;
-            }
+            }*/
 
             update();
         }
