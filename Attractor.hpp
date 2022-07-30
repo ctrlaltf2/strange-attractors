@@ -1,4 +1,6 @@
 #pragma once
+#include <algorithm>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <functional>
@@ -71,16 +73,26 @@ public:
 
     /** Run one iteration */
     inline void update() {
-        // Save state
-
-        const pcl::PointXYZRGBA point(100*state_.x, 100*state_.y, 100*state_.z, 255, 255, 255, 32);
-        cloud->push_back(point);
-
-        // And then update it
         bigfloat x = next_x(state_);
         bigfloat y = next_y(state_);
         bigfloat z = next_z(state_);
         bigfloat w = next_w(state_);
+
+        bigfloat dx = state_.x - x;
+        bigfloat dy = state_.y - y;
+        bigfloat dz = state_.z - z;
+        bigfloat dw = state_.w - w;
+
+        bigfloat dist = std::sqrt(dx*dx + dy*dy + dz*dz + dw*dw);
+        bigfloat dist_ratio = std::clamp(dist / 4.0, 0.0, 1.0);
+
+        // Assign on gradient from #ac1616 to #f3d035 based on distance travelled
+        const uint8_t r = dist_ratio * 172 + ((1 - dist_ratio) * 243);
+        const uint8_t g = dist_ratio *  22 + ((1 - dist_ratio) * 208);
+        const uint8_t b = dist_ratio *  22 + ((1 - dist_ratio) * 53);
+
+        const pcl::PointXYZRGBA point(100*state_.x, 100*state_.y, 100*dist, r, g, b, 32);
+        cloud->push_back(point);
 
         state_ = Vec4{x, y, z, w};
     }
