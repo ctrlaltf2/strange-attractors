@@ -22,7 +22,7 @@
 float pick(float a, float b) {
     static std::random_device r;
     static std::default_random_engine generator(r());
-    static std::uniform_real_distribution distribution(a, b);
+    std::uniform_real_distribution distribution(a, b);
 
     return distribution(generator);
 }
@@ -34,35 +34,65 @@ int main() {
 #ifdef QUAD_3
     std::cout << "3D Quadratic System" << '\n';
     const std::array<const double, 30> a = {
+        // pick(0.99, 1.1) * -0.875,
         -0.875,
-        -0.173,
+        pick(-0.1, 0.1) + -0.173,
+        //-0.173,
+        // pick(0.99, 1.1) *  0.307,
          0.307,
+        // pick(0.99, 1.1) * -0.436,
         -0.436,
+        // pick(0.99, 1.1) *  0.598,
          0.598,
+        // pick(0.99, 1.1) *  0.003,
          0.003,
+        // pick(0.99, 1.1) * -0.039,
         -0.039,
+        // pick(0.99, 1.1) *  0.96,
          0.96,
+        // pick(0.99, 1.1) * -0.84,
         -0.84,
+        // pick(0.99, 1.1) *  0.885,
          0.885,
-         0.774,
+        pick(0.05, 0.1) +  0.774,
+        // 0.774,
+        // pick(0.99, 1.1) *  0.281,
          0.281,
+        // pick(-0.1, 0.1) + -0.015,
         -0.015,
+        // pick(0.99, 1.1) *  0.585,
          0.585,
+        // pick(0.99, 1.1) *  0.442,
          0.442,
+        // pick(0.99, 1.1) * -0.18,
         -0.18,
+        // pick(0.99, 1.1) * -0.535,
         -0.535,
+        // pick(0.99, 1.1) * -0.151,
         -0.151,
+        // pick(0.99, 1.1) * -0.971,
         -0.971,
+        // pick(-0.1, 0.1) + -0.48,
         -0.48,
-         0.777,
+        pick(-0.1, 0.1) +  0.777,
+        // 0.777,
+        // pick(0.99, 1.1) *  0.418,
          0.418,
+        // pick(0.99, 1.1) *  0.185,
          0.185,
+        // pick(0.99, 1.1) *  0.006,
          0.006,
+        // pick(0.99, 1.1) *  0.45,
          0.45,
+        // pick(0.99, 1.1) * -0.066,
         -0.066,
+        // pick(0.99, 1.1) *  0.498,
          0.498,
+        // pick(0.99, 1.1) *  0.142,
          0.142,
+        // pick(0.99, 1.1) * -0.246,
         -0.246,
+        // pick(0.99, 1.1) * -0.939,
         -0.939
     };
 
@@ -102,7 +132,7 @@ int main() {
     Attractor attractor(next_x, next_y, next_z);
 
     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>());
-    for(unsigned i = 0; i < 15; ++i) {
+    for(unsigned i = 0; i < 3; ++i) {
         std::cout << "Iteration #" << i << '\n';
 
         // Run some iterations, until memory is almost capped out
@@ -129,6 +159,7 @@ int main() {
         attractor.cloud.reset(new pcl::PointCloud<pcl::PointXYZRGBA>());
     }
 
+    /*
     // Downsample final cloud
     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGBA>());
 #ifdef CUDA
@@ -139,16 +170,16 @@ int main() {
     sor.setInputCloud(cloud);
     sor.setLeafSize(0.5f, 0.5f, 0.5f);
     sor.setMinimumPointsNumberPerVoxel(5); // Helps to highlight lines forming from dots, tends to filter stray points in between structures
-    sor.filter(*cloud_filtered);
+    sor.filter(*cloud_filtered);*/
     attractor.cloud.reset();
 
-    std::cout << "Saving to ./out.pcd.\n";
-    pcl::io::savePCDFile("./out.pcd", *cloud_filtered);
+    //std::cout << "Saving to ./out.pcd.\n";
+    //pcl::io::savePCDFile("./out.pcd", *cloud_filtered);
 
-    std::cout << "Plotting " << cloud_filtered->size() << " points\n";
+    //std::cout << "Plotting " << cloud_filtered->size() << " points\n";
 
     pcl::visualization::CloudViewer viewer("Cloud Viewer");
-    viewer.showCloud(cloud_filtered);
+    viewer.showCloud(cloud);
 #else
     std::cout << "Cliffod 2D attractor" << '\n';
     double a = 1.7;
