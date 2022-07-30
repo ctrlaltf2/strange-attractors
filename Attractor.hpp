@@ -71,6 +71,8 @@ public:
         state_.w = w_;
     }
 
+    double max_dist = 0.0;
+
     /** Run one iteration */
     inline void update() {
         bigfloat x = next_x(state_);
@@ -84,14 +86,15 @@ public:
         bigfloat dw = state_.w - w;
 
         bigfloat dist = std::sqrt(dx*dx + dy*dy + dz*dz + dw*dw);
-        bigfloat dist_ratio = std::clamp(dist / 4.0, 0.0, 1.0);
+        max_dist = std::max(max_dist, dist);
+        bigfloat dist_ratio = std::clamp(dist / 3.0, 0.0, 1.0);
 
         // Assign on gradient from #ac1616 to #f3d035 based on distance travelled
-        const uint8_t r = dist_ratio * 172 + ((1 - dist_ratio) * 243);
-        const uint8_t g = dist_ratio *  22 + ((1 - dist_ratio) * 208);
-        const uint8_t b = dist_ratio *  22 + ((1 - dist_ratio) * 53);
+        const uint8_t r = dist_ratio * 236 + ((1 - dist_ratio) * 50);
+        const uint8_t g = dist_ratio *   9 + ((1 - dist_ratio) * 236);
+        const uint8_t b = dist_ratio *   9 + ((1 - dist_ratio) * 9);
 
-        const pcl::PointXYZRGBA point(100*state_.x, 100*state_.y, 100*dist, r, g, b, 32);
+        const pcl::PointXYZRGBA point(100*state_.x, 100*state_.y, 100*state_.z, r, g, b, 32);
         cloud->push_back(point);
 
         state_ = Vec4{x, y, z, w};
