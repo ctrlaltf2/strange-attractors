@@ -2,7 +2,7 @@
 Final project for University of Pittsburgh ECE 1895.
 
 ## Design
-![Software overview chart](software.png)
+![Software overview chart](assets/software.png)
 ### 1. User-defined functions
 First step is pretty important, basically the user of the Attractor class will define some functions that represent the next x, y, and z points as a function of the previous ones. Typically, those functions have some real number parameters $a$, $b$, $c$, etc., within the bound $[-1, 1]$.
 
