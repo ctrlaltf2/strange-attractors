@@ -90,9 +90,9 @@ public:
         bigfloat dist_ratio = std::clamp(dist / 3.0, 0.0, 1.0);
 
         // Assign on gradient from #ac1616 to #f3d035 based on distance travelled
-        const uint8_t r = dist_ratio * 236 + ((1 - dist_ratio) * 50);
-        const uint8_t g = dist_ratio *   9 + ((1 - dist_ratio) * 236);
-        const uint8_t b = dist_ratio *   9 + ((1 - dist_ratio) * 9);
+        const uint8_t r = dist_ratio * 179 + ((1 - dist_ratio) * 42);
+        const uint8_t g = dist_ratio *  42 + ((1 - dist_ratio) * 51);
+        const uint8_t b = dist_ratio * 213 + ((1 - dist_ratio) * 213);
 
         const pcl::PointXYZRGBA point(100*state_.x, 100*state_.y, 100*state_.z, r, g, b, 32);
         cloud->push_back(point);
@@ -103,6 +103,12 @@ public:
     /** Run for iter iterations */
     void run(unsigned long long iter) {
         for(unsigned long long i = 0; i < iter; ++i) {
+            if(i % 1024 == 0) { // Don't check very often
+                if(std::isnan(state_.x) or std::isnan(state_.y) or std::isnan(state_.z)) {
+                    std::cout << "Divergence detected- breaking" << '\n';
+                    break;
+                }
+            }
             /*if(i % 8192 == 0) {
                 std::cout << "Iteration #" << i << '\n';
 
