@@ -7,7 +7,7 @@ Final project for University of Pittsburgh ECE 1895.
 First step is pretty important, basically the user of the Attractor class will define some functions that represent the next x, y, and z points as a function of the previous ones. Typically, those functions have some real number parameters $a$, $b$, $c$, etc., within the bound $[-1, 1]$.
 
 ### 2. Attractor class
-The Attractor class is a template class that's pretty simple. It takes in any functions with the correct signature (i.e. `double(Vec4)`).
+The Attractor class is a template class that's pretty simple. It takes in any functions with the correct signature (i.e. `double(Vec4)`), and executes them. The functions are a double as a function of a 4D vector (4D because I preplanned for 4D support- W is not visualized currently). The 4D vector is the previous state, and the double returned is the next state for the coordinate the function corresponds to.
 
 NOTE: If higher precision is needed (at the cost of computation time), compile time defines can be set to control what the underlying type used for floating point calculations is. By default, it's double. See `multiprecision.hpp` for more info on what those compile-time definitions are and what they do.
 
